@@ -24,7 +24,7 @@ public class WeatherByCityId extends Helpers {
     private String couunryValue = "UA";
     private String nameValue = "Lutsk";
     private String idValue = "702569";
-    private String messageValue = "city not found";
+    private String messageValue = "city not found" ;
     //Output param name
     private String messageRespParamJsonPath = "message";
 
