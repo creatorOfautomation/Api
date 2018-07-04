@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="database.POJOClasses.WeatherData" table="weatherdata">
+        <!--<id name="idd" column="idd">-->
+            <!--<generator class="native"/>-->
+        <!--</id>-->
+
+        <!--<property name="id" column="id" type="int"/>-->
+        <property name="cityName" column="cityname" type="String"/>
+        <property name="country" column="country" type="String"/>
+
+
+    </class>
+</hibernate-mapping>
