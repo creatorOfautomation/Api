@@ -1,6 +1,7 @@
 package properties;
 
 import io.qameta.allure.Step;
+import io.restassured.http.Header;
 import io.restassured.response.Response;
 import org.apache.log4j.Logger;
 import org.apache.poi.xssf.usermodel.XSSFSheet;

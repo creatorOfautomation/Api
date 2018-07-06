@@ -2,7 +2,6 @@ package database;
 
 import org.apache.log4j.Logger;
 import properties.PropertiesCollection;
-
 import java.sql.*;
 import java.util.Locale;
 
@@ -32,14 +31,14 @@ public class GetConnectionDB {
             log.debug("Try to get connection to Oracle DB whit jdbsURL: " + jdbsURI + " host: " + hostDB + " port: " + portDB +
                     " DBName: " + schemeDB);
             connection = DriverManager.getConnection(jdbsURI + ":@" + hostDB + ":" + portDB + ":" + schemeDB, userDB, passwordDB);
-            System.out.println(jdbsURI + ":@" + hostDB + ":" + portDB + ":" + schemeDB + userDB + passwordDB);
+            log.debug("The jdbc is: " + jdbsURI + ":@" + hostDB + ":" + portDB + ":" + schemeDB + userDB + passwordDB);
         }catch (SQLException e) {
             log.error("Connection failed!");
             log.error(e.getMessage());
             return null;
         }
         if (connection != null) {
-            log.debug("Connection is set up");
+            log.debug("Connection is set up successfully");
         }
         return connection;
     }
@@ -54,15 +53,5 @@ public class GetConnectionDB {
             log.error(e.getMessage());
 
         }
-
-    }
-
-    public static void main(String[] args) throws Exception {
-        GetConnectionDB getConnectionDB = new GetConnectionDB();
-        GetConnectionDB getConnectionDB1 = new GetConnectionDB();
-        Statement stmt = getConnectionDB1.openConnection().createStatement();
-        ResultSet rs = stmt.executeQuery("select * from postingdata where fileid=1");
-        rs.next() ;
-        System.out.println(getConnectionDB.jdbsURI + ":@" + getConnectionDB.hostDB + ":" + getConnectionDB.portDB + ":" + getConnectionDB.schemeDB + getConnectionDB.userDB + getConnectionDB.passwordDB);
     }
 }
