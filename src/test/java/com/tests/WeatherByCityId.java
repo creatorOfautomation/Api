@@ -24,7 +24,7 @@ public class WeatherByCityId extends Helpers {
     private String couunryValue = "UA";
     private String nameValue = "Lutsk";
     private String idValue = "702569";
-    private String messageValue = "city not found" ;
+    private String messageValue = "city not found";
     //Output param name
     private String messageRespParamJsonPath = "message";
 
@@ -50,11 +50,12 @@ public class WeatherByCityId extends Helpers {
 
     @Test
     public void testWrongCityId() {
-        Response response = getResponse(Endpoints.GET_WEATHER_FOR_CITY, appidReqParamName, paramValue.get(appidReqParamName), idReqParamName, paramValue.get(idReqParamName)+"54");
+        Response response = getResponse(Endpoints.GET_WEATHER_FOR_CITY, appidReqParamName, paramValue.get(appidReqParamName), idReqParamName, paramValue.get(idReqParamName) + "54");
         response.then().contentType(PropertiesCollection.CONTENT_RESPONSE_TYPE).statusCode(404);
         softAssertContainsStringJsonPath(response, messageRespParamJsonPath, messageValue);
         assertAll();
     }
+
     @Test
     public void testNotAuthorized() {
         Response response = getResponse(Endpoints.GET_WEATHER_FOR_CITY, appidReqParamName, paramValue.get(appidReqParamName) + 7,

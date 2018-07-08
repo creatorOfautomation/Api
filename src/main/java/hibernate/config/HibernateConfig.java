@@ -1,6 +1,6 @@
 package hibernate.config;
 
-import database.POJOClasses.WeatherData;
+
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -29,16 +29,16 @@ public class HibernateConfig {
         return sessionFactory;
     }
 
-    public static void main(String[] args) {
+   /* public static void main(String[] args) {
 
         List<Object> data = null;
-      /*  Configuration configuration = new Configuration().configure();
+      *//*  Configuration configuration = new Configuration().configure();
         StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
                 .applySettings(configuration.getProperties());
         sessionFactory = configuration.buildSessionFactory();
        // SessionFactory sessionFactory =  HibernateConfig.getSessionFactory();
         Session session = sessionFactory.openSession();
-        Transaction transaction = session.beginTransaction();*/
+        Transaction transaction = session.beginTransaction();*//*
         SessionFactory factory = getSessionFactory();
         // factory.close();
         Session session = sessionFactory.openSession();
@@ -58,5 +58,5 @@ public class HibernateConfig {
         transaction.commit();
         factory.close();
 
-    }
+    }*/
 }

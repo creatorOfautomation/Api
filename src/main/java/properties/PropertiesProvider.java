@@ -53,4 +53,8 @@ public class PropertiesProvider {
         return properties.getProperty("scheme.database");
     }
 
+    public String getBasePostUrl() {
+        return properties.getProperty("base.post.url");
+    }
+
 }

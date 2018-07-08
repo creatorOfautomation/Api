@@ -105,14 +105,12 @@
             <artifactId>slf4j-simple</artifactId>
             <version>1.6.1</version>
         </dependency>
+        <dependency>
+            <groupId>com.googlecode.json-simple</groupId>
+            <artifactId>json-simple</artifactId>
+            <version>1.1.1</version>
+        </dependency>
 
-        <!--Якщо щось перестане працювати по выдношенню до БД - треба видалити цю депенденсы-->
-
-        <!--<dependency>-->
-            <!--<groupId>com.oracle</groupId>-->
-            <!--<artifactId>ojdbc14</artifactId>-->
-            <!--<version>10.2.0.4.0</version>-->
-        <!--</dependency>-->
 
     </dependencies>
 </project>

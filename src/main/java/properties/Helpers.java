@@ -1,11 +1,15 @@
 package properties;
 
 import io.qameta.allure.Step;
+import io.restassured.RestAssured;
 import io.restassured.http.Header;
 import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
 import org.apache.log4j.Logger;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import org.json.simple.JSONObject;
 import org.testng.asserts.SoftAssert;
 
 import java.io.FileInputStream;
@@ -20,6 +24,9 @@ public class Helpers extends BaseClass {
     private XSSFWorkbook workbook;
     private Logger log = Logger.getLogger(Helpers.class);
     private String breakLine = System.lineSeparator();
+    private JSONObject reqParam = new JSONObject();
+    //  private RequestSpecification request = RestAssured.given();
+
 
     public Response getResponse(String url, String param1, String value1, String param2, String value2, String param3, String value3, String param4, String value4) {
         log.debug("Try to make get request :" + url + " with parameters " + param1 + " " + value1 + " " + param2 + " " + value2
@@ -95,6 +102,7 @@ public class Helpers extends BaseClass {
     public void softAssertEquals(final String actValue, String expValue) {
         softAssert.assertEquals(actValue.trim(), expValue.trim());
     }
+
     public void assertAll() {
         softAssert.assertAll();
     }
@@ -102,7 +110,6 @@ public class Helpers extends BaseClass {
     @Step
     public void logAllure(String logMessage) {
         //Method for log to allure
-
     }
 
     public String[] readFromExcel(final String fileName, final int cell) {
@@ -146,5 +153,29 @@ public class Helpers extends BaseClass {
         return data;
 
     }
+
+    public Helpers setJsonParam(String key, String value) {
+        log.debug("Try to put json param. The key is : " + key + " The value is: " + value);
+        reqParam.put(key, value);
+        return this;
+    }
+
+    public Helpers setJsonParam(String key, int value) {
+        log.debug("Try to put json param. The key is : " + key + " The value is: " + value);
+        reqParam.put(key, value);
+        return this;
+    }
+
+    public String putParam() {
+        return reqParam.toJSONString();
+    }
+
+    @Step("Make POST query with url {url}")
+    public Response post(String url, RequestSpecification request) {
+
+        log.debug("Try to make request on url: " + url + " Request is: " + request);
+        return request.post(url);
+    }
+
 
 }
