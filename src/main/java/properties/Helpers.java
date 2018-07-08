@@ -15,6 +15,7 @@ import org.testng.asserts.SoftAssert;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Random;
 
 import static io.restassured.RestAssured.given;
 
@@ -84,23 +85,27 @@ public class Helpers extends BaseClass {
     }
 
     @Step("Making assertion: Checking Parameter: {jsonPath} Expected: {expectedValue} ")
-    public void softAssertEqualsByJsonPath(final Response response, final String jsonPath, final String expectedValue) {
+    public Helpers softAssertEqualsByJsonPath(final Response response, final String jsonPath, final String expectedValue) {
 
         softAssert.assertEquals(response.path(jsonPath).toString().trim(), expectedValue.trim());
+        return this;
     }
 
     @Step("Making assertion: Checking Parameter: {jsonPath} Expected: {expectedValue} ")
-    public void softAssertContainsStringJsonPath(final Response response, final String jsonPath, final String expectedValue) {
+    public Helpers softAssertContainsStringJsonPath(final Response response, final String jsonPath, final String expectedValue) {
 
         String actualResult = response.path(jsonPath).toString().trim();
 
         softAssert.assertTrue(actualResult.contains(expectedValue), "ERROR! Failed assertion. " + breakLine + "Expected: " +
                 expectedValue + breakLine + " but it does not contain " + breakLine + "Actual : " + actualResult);
+        return this;
 
     }
 
-    public void softAssertEquals(final String actValue, String expValue) {
+    public Helpers softAssertEquals(final String actValue, String expValue) {
+
         softAssert.assertEquals(actValue.trim(), expValue.trim());
+        return this;
     }
 
     public void assertAll() {
@@ -120,7 +125,7 @@ public class Helpers extends BaseClass {
             excelFile = new FileInputStream(PropertiesCollection.EXCEL_DATA_PATH + fileName + ".xlsx");
 
         } catch (FileNotFoundException e) {
-            log.error("ERROR to load Excel file! File not found!!! " + e.getMessage());
+            log.error("ERROR! to load Excel file! File not found!!! " + e.getMessage());
 
         }
         if (excelFile != null) {
@@ -130,7 +135,7 @@ public class Helpers extends BaseClass {
 
             workbook = new XSSFWorkbook(excelFile);
         } catch (IOException e) {
-            log.error("ERROR! IOException occured!!!" + e.getMessage());
+            log.error("ERROR! IOException occurred!!!" + e.getMessage());
         }
         XSSFSheet sheet = workbook.getSheetAt(0);
         int rows = sheet.getLastRowNum() + 1;
@@ -174,8 +179,32 @@ public class Helpers extends BaseClass {
     public Response post(String url, RequestSpecification request) {
 
         log.debug("Try to make request on url: " + url + " Request is: " + request);
+        log.debug(request.log().all());
         return request.post(url);
     }
 
+    @Step("Make PUT query with url {url}")
+    public Response put(String url, RequestSpecification request) {
+
+        log.debug("Try to make request on url: " + url + " Request is: " + request);
+        log.debug(request.log().all());
+        return request.put(url);
+    }
+
+
+
+    public String randomPureString(int length) {
+        final String data = "qwertyuiopasdfghjklzxcvbnm";
+
+        Random random = new Random();
+        StringBuilder sb = new StringBuilder(length);
+
+        for (int i = 0; i <= length; i++)
+
+
+            sb.append(data.charAt(random.nextInt(data.length())));
+        return sb.toString();
+
+    }
 
 }
