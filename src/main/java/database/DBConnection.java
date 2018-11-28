@@ -5,7 +5,7 @@ import properties.PropertiesCollection;
 import java.sql.*;
 import java.util.Locale;
 
-public class GetConnectionDB {
+public class DBConnection {
 
     private String hostDB = PropertiesCollection.HOST_DB;
     private String portDB = PropertiesCollection.PORT_DB;
@@ -14,8 +14,40 @@ public class GetConnectionDB {
     private String passwordDB = PropertiesCollection.PASSWORD_DB;
     private String schemeDB = PropertiesCollection.SCHEME_DB;
     private String jdbsURI = "jdbc:oracle:thin";
-    private Logger log = Logger.getLogger(GetConnectionDB.class);
-    private Connection connection = null;
+    private Logger log = Logger.getLogger(DBConnection.class);
+    private Connection connection;
+
+    public DBConnection() {
+        try {
+            log.debug("!!Try to set JDBC Driver");
+            Class.forName(driverDB);
+            Locale.setDefault(Locale.ENGLISH);
+            log.debug("JDBS was set");
+        } catch (ClassNotFoundException e) {
+            log.error("Class not found exception occurred. Driver was not set " + e.getMessage());
+
+        }
+        try {
+            log.debug("Try to get connection to Oracle DB whit jdbsURL: " + jdbsURI + " host: " + hostDB + " port: " + portDB +
+                    " DBName: " + schemeDB);
+            connection = DriverManager.getConnection(jdbsURI + ":@" + hostDB + ":" + portDB + ":" + schemeDB, userDB, passwordDB);
+            log.debug("The jdbc is: " + jdbsURI + ":@" + hostDB + ":" + portDB + ":" + schemeDB + userDB + passwordDB);
+        }catch (SQLException e) {
+            log.error("Connection failed!");
+            log.error(e.getMessage());
+
+        }catch (NullPointerException e) {
+            log.error("ERROR! Can't set connection: " + e.getMessage() + e.getLocalizedMessage());
+        }
+        if (connection != null) {
+            log.debug("Connection is set up successfully " + connection);
+        }
+
+    }
+
+    public Connection getConnection() {
+        return connection;
+    }
 
     public Connection openConnection() {
         try {
@@ -33,7 +65,7 @@ public class GetConnectionDB {
             connection = DriverManager.getConnection(jdbsURI + ":@" + hostDB + ":" + portDB + ":" + schemeDB, userDB, passwordDB);
             log.debug("The jdbc is: " + jdbsURI + ":@" + hostDB + ":" + portDB + ":" + schemeDB + userDB + passwordDB);
         }catch (SQLException e) {
-            log.error("Connection failed!");
+            log.error("Connection set up failed!");
             log.error(e.getMessage());
             return null;
         }

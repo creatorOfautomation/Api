@@ -3,9 +3,9 @@
 <suite name="GeneralTestSuit" verbose="1">
 
     <!--<parameter name="configFile" value="config.properties"/>-->
-    <test name="WeatherByCityTests">
+    <test name="post user">
         <classes>
-            <class name="com.tests.WeatherByCityName"/>
+            <class name="com.tests.Post"/>
         </classes>
     </test>
 

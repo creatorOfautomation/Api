@@ -29,7 +29,7 @@ public class PropertiesProvider {
     }
 
     public String getHostDataBase() {
-        return properties.getProperty("host.databade");
+        return properties.getProperty("host.database");
     }
 
     public String getPortDataBase() {
