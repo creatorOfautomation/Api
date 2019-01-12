@@ -1,22 +1,21 @@
 package com.posts.tests;
 
-import POJOData.weatherbycity.Main;
-import POJOData.weatherbycity.WeatherForCity;
+
 import com.posts.BaseClass;
 import com.posts.methods.Posts;
-import com.posts.pojo.pojoreq.PostReqPojo;
-import com.posts.pojo.pojoresp.PostRespPojo;
+import com.posts.pojo.posts.resp.PostRespPojo;
+import endpoints.Endpoints;
 import io.restassured.RestAssured;
 import io.restassured.mapper.ObjectMapperType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.assertj.core.api.SoftAssertions;
 import org.testng.annotations.Test;
-import org.json.simple.JSONObject;
+import properties.Helpers;
 
 public class PostTest extends BaseClass {
 
-
+    private Helpers helpers = new Helpers();
    /* @Test
     public void testAddAuthor() {
 
@@ -48,20 +47,35 @@ public class PostTest extends BaseClass {
     public void addAuthor() {
 
         Posts posts = new Posts();
+        String id = helpers.getUnicId();
+        String author = helpers.randomPureString(10);
+        String title = helpers.randomPureString(10);
 
-        Response response = posts.addAuthor("323", "kjsdfnksjfnksjd");
+        posts.setId(id);
+        posts.setAuthor(author);
+        posts.setTitle(title);
 
+        Response response = posts.addAuthor();
         response.then().assertThat().statusCode(201);
-
-        PostRespPojo author = response.as(PostRespPojo.class, ObjectMapperType.GSON);
-
-        SoftAssertions softAssertions = new SoftAssertions();
-        softAssertions.assertThat(author.getId()).isEqualTo("323");
-        softAssertions.assertThat(author.getTitle()).isEqualTo("kjsdfnksjfnksjd");
-        softAssertions.assertAll();
-
-
+        PostRespPojo resp = response.as(PostRespPojo.class, ObjectMapperType.GSON);
+        posts.assertAuthor(resp.getAuthor(), author)
+                .assertId(resp.getId(), id)
+                .assertTitle(resp.getTitle(), title)
+                .assertAll();
     }
 
+
+    @Test
+    public void addAuthor1() {
+
+        Posts posts = new Posts();
+
+        posts.setAuthor("Author");
+        posts.setId("2432");
+        posts.setTitle("Title");
+
+        RequestSpecification request = RestAssured.given();
+        request.body(posts).post(Endpoints.POSTS).then().log().all();
+    }
 
 }

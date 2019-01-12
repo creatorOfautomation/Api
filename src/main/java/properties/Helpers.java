@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import org.assertj.core.api.SoftAssertions;
 import org.json.simple.JSONObject;
 import org.testng.asserts.SoftAssert;
 
@@ -15,7 +16,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Random;
 
-import static io.restassured.RestAssured.given;
 
 public class Helpers extends BaseClass {
 
@@ -23,64 +23,6 @@ public class Helpers extends BaseClass {
     private XSSFWorkbook workbook;
     private Logger log = Logger.getLogger(Helpers.class);
     private String breakLine = System.lineSeparator();
-    private JSONObject reqParam = new JSONObject();
-    //  private RequestSpecification request = RestAssured.given();
-
-
-    public Response getResponse(String url, String param1, String value1, String param2, String value2, String param3, String value3, String param4, String value4) {
-        log.debug("Try to make get request :" + url + " with parameters " + param1 + " " + value1 + " " + param2 + " " + value2
-                + " " + param3 + " " + value3 + " " + param4 + " " + value4);
-        return given()
-                .param(param1, value1)
-                .param(param2, value2)
-                .param(param3, value3)
-                .param(param4, value4)
-                .get(url);
-
-    }
-
-    public Response getResponse(String url, String param1, String value1, String param2, String value2, String param3, String value3) {
-        log.debug("Try to make get request :" + url + " with parameters " + param1 + " " + value1 + " " + param2 + " " + value2
-                + " " + param3 + " " + value3);
-        return given()
-                .param(param1, value1)
-                .param(param2, value2)
-                .param(param3, value3)
-                .get(url);
-    }
-
-    @Step("Getting response of Endpoint: {url} with param and value: {param1} : {value1} AND    {param2} : {value2}")
-    public Response getResponse(String url, String param1, String value1, String param2, String value2) {
-
-        log.debug("Try to make get request :" + url + " with parameters " + param1 + " " + value1 + " " + param2 + " " + value2);
-        Response response = given()
-                .param(param1, value1)
-                .param(param2, value2)
-                .get(url);
-        log.debug(response.then().log().all());
-        log.debug("The response is " + response.getBody());
-
-        return response;
-
-    }
-
-    public Response getResponse(String url, String param1, String value1) {
-        log.debug("Try to make get request :" + url + " with parameters " + param1 + " " + value1);
-        return given()
-                .param(param1, value1)
-                .get(url);
-
-    }
-
-    public Response getResponse(String url) {
-
-        log.debug("Try to make get request :" + url + " without parameters ");
-        Response response = given()
-                .get(url);
-        log.debug("The response is " + response.getBody());
-        return response;
-
-    }
 
     @Step("Making assertion: Checking Parameter: {jsonPath} Expected: {expectedValue} ")
     public Helpers softAssertEqualsByJsonPath(final Response response, final String jsonPath, final String expectedValue) {
@@ -100,9 +42,9 @@ public class Helpers extends BaseClass {
 
     }
 
-    public Helpers softAssertEquals(final String actValue, String expValue) {
+    public Helpers softAssertEquals(final String actValue, String expValue, SoftAssertions assertions) {
 
-        softAssert.assertEquals(actValue.trim(), expValue.trim());
+        assertions.assertThat(actValue.trim()).isEqualTo(expValue.trim());
         return this;
     }
 
@@ -157,21 +99,6 @@ public class Helpers extends BaseClass {
 
     }
 
-    public Helpers setJsonParam(String key, String value) {
-        log.debug("Try to put json param. The key is : " + key + " The value is: " + value);
-        reqParam.put(key, value);
-        return this;
-    }
-
-    public Helpers setJsonParam(String key, int value) {
-        log.debug("Try to put json param. The key is : " + key + " The value is: " + value);
-        reqParam.put(key, value);
-        return this;
-    }
-
-    public String putParam() {
-        return reqParam.toJSONString();
-    }
 
     @Step("Make POST query with url {url}")
     public Response post(String url, RequestSpecification request) {
@@ -190,7 +117,6 @@ public class Helpers extends BaseClass {
     }
 
 
-
     public String randomPureString(int length) {
         final String data = "qwertyuiopasdfghjklzxcvbnm";
 
@@ -205,4 +131,29 @@ public class Helpers extends BaseClass {
 
     }
 
+    public String getUnicId() {
+
+        return "" + System.currentTimeMillis();
+    }
+
+    public void putParam(String key, String value, JSONObject jsonObject) {
+        log.debug(String.format("Put key: '%s' value: '%s'", key, value));
+        jsonObject.put(key, value);
+
+    }
+
+    public String toJSON(JSONObject jsonObject) {
+
+        String string = jsonObject.toJSONString();
+        log.debug("Convert params to JSON: " + string);
+
+        return string;
+    }
+
+    public static void main(String[] args) {
+        Helpers helpers = new Helpers();
+        System.out.println(helpers.getUnicId());
+
+
+    }
 }
